@@ -6,10 +6,18 @@ module.exports = gql`
   # This "Book" type defines the queryable fields for every book in our data source.
 
   type User {
-    email: String!
     username: String!
     password: String!
     token: String
+    createdAt: String!
+    latestMessage: Message
+    lastSeen: String
+  }
+  type Message {
+    uuid: String!
+    content: String!
+    from: String!
+    to: String!
     createdAt: String!
   }
   # The "Query" type is special: it lists all of the available queries that
@@ -17,9 +25,19 @@ module.exports = gql`
   # case, the "books" query returns an array of zero or more Books (defined above).
   type Query {
     getUsers: [User]!
+    getOnlineUsers: [User]
     login(username: String!, password: String!): User!
+    getMessages(from: String!): [Message]!
   }
   type Mutation {
-    register(username: String!, email: String!, password: String!): User!
+    register(username: String!, password: String!): User!
+    sendMessage(to: String!, content: String!): Message!
+    updateLastSeen: User!
+    userLogOut: User!
+  }
+  type Subscription {
+    newMessage: Message!
+    getOnlineUserList: User!
+    userLoggedOut: User!
   }
 `;

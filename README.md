@@ -8,3 +8,29 @@ Build a simple app using apollo server/client using real time data. It should as
 - Backend application on apollo client has been setup
 - Created register and login segment on backend application
 - Integrated register and login segment on frontend application
+
+# Features
+
+- Can register user
+- Can login and logout user
+- Shows online user list
+- Can send message and see the message realtime by the users logged in.
+
+# Setup instructions
+
+# backend setup
+
+- Go to backend folder run `npm install`
+- Create a mysql user with following credentials
+  username: tekkon_task
+  password: tekkon_task
+  db: tekkon_task
+- Grand all privileges on db to tekkon_task
+- Run `npm i sequelize-cli -g`
+- Run `npx sequelize-cli db:migrate`
+- Run `npm run dev`
+
+# frontend setup
+
+- Go to backend folder run `npm install`
+- Run `npm start`

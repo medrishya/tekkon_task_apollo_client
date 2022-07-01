@@ -1,28 +1,38 @@
-import { Button, Form, Input } from "antd";
-
+import { Button, Form, Input, Typography, notification } from "antd";
 import { gql, useMutation } from "@apollo/client";
 
+const { Title } = Typography;
+
 const REGISTER_USER = gql`
-  mutation register($username: String!, $email: String!, $password: String!) {
-    register(username: $username, email: $email, password: $password) {
+  mutation register($username: String!, $password: String!) {
+    register(username: $username, password: $password) {
       username
-      email
+
       createdAt
     }
   }
 `;
-
+const openNotification = (message) => {
+  notification.open({
+    message: "User Registration",
+    description: message,
+    onClick: () => {
+      console.log("Notification Clicked!");
+    },
+  });
+};
 export const RegisterForm = () => {
+  const [form] = Form.useForm();
   const [registerUser, { loading }] = useMutation(REGISTER_USER, {
     update(_, res) {
-      console.log(res);
+      openNotification("User registration successfull");
+      form.resetFields();
     },
     onError(err) {
-      console.log(err);
+      openNotification("User registration failed, please use another username");
     },
   });
   const onFinish = (values) => {
-    console.log("Success:", values);
     registerUser({ variables: values });
   };
 
@@ -31,69 +41,57 @@ export const RegisterForm = () => {
   };
 
   return (
-    <Form
-      name="basic"
-      labelCol={{
-        span: 8,
-      }}
-      wrapperCol={{
-        span: 16,
-      }}
-      initialValues={{
-        remember: true,
-      }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-      autoComplete="off"
-    >
-      <Form.Item
-        label="Username"
-        name="username"
-        rules={[
-          {
-            required: true,
-            message: "Please input your username!",
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        label="Email"
-        name="email"
-        rules={[
-          {
-            required: true,
-            message: "Please input your email!",
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label="Password"
-        name="password"
-        rules={[
-          {
-            required: true,
-            message: "Please input your password!",
-          },
-        ]}
-      >
-        <Input.Password />
-      </Form.Item>
-
-      <Form.Item
+    <div>
+      <Title level={1}>Register User</Title>
+      <Form
+        form={form}
+        name="basic"
         wrapperCol={{
           offset: 8,
-          span: 16,
+          span: 8,
         }}
+        initialValues={{
+          remember: true,
+        }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
       >
-        <Button type="primary" htmlType="submit">
-          Register
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item
+          name="username"
+          rules={[
+            {
+              required: true,
+              message: "Please input your username!",
+            },
+          ]}
+        >
+          <Input placeholder="Username" />
+        </Form.Item>
+
+        <Form.Item
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: "Please input your password!",
+            },
+          ]}
+        >
+          <Input.Password placeholder="Password" />
+        </Form.Item>
+
+        <Form.Item
+          wrapperCol={{
+            offset: 10,
+            span: 5,
+          }}
+        >
+          <Button type="primary" htmlType="submit">
+            Register
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 };

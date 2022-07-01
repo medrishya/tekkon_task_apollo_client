@@ -1,7 +1,7 @@
-import { Button, Form, Input } from "antd";
-
+import { Button, Form, Input, Typography } from "antd";
 import { gql, useLazyQuery } from "@apollo/client";
 
+const { Title } = Typography;
 const LOGIN_USER = gql`
   query login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
@@ -17,6 +17,7 @@ export const LoginForm = ({ set_logged_in }) => {
     onCompleted(data) {
       localStorage.setItem("token", data.login.token);
       set_logged_in(true);
+      window.location.reload();
     },
     onError(err) {
       console.log(err);
@@ -32,57 +33,56 @@ export const LoginForm = ({ set_logged_in }) => {
   };
 
   return (
-    <Form
-      name="basic"
-      labelCol={{
-        span: 8,
-      }}
-      wrapperCol={{
-        span: 16,
-      }}
-      initialValues={{
-        remember: true,
-      }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-      autoComplete="off"
-    >
-      <Form.Item
-        label="Username"
-        name="username"
-        rules={[
-          {
-            required: true,
-            message: "Please input your username!",
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label="Password"
-        name="password"
-        rules={[
-          {
-            required: true,
-            message: "Please input your password!",
-          },
-        ]}
-      >
-        <Input.Password />
-      </Form.Item>
-
-      <Form.Item
+    <div>
+      <Title level={1}>Login</Title>
+      <Form
+        name="basic"
         wrapperCol={{
           offset: 8,
-          span: 16,
+          span: 8,
         }}
+        initialValues={{
+          remember: true,
+        }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
       >
-        <Button type="primary" htmlType="submit">
-          Register
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item
+          name={"username"}
+          rules={[
+            {
+              required: true,
+              message: "Please input your username!",
+            },
+          ]}
+        >
+          <Input placeholder="Username" />
+        </Form.Item>
+
+        <Form.Item
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: "Please input your password!",
+            },
+          ]}
+        >
+          <Input.Password placeholder="Password" />
+        </Form.Item>
+
+        <Form.Item
+          wrapperCol={{
+            offset: 10,
+            span: 5,
+          }}
+        >
+          <Button type="primary" htmlType="submit">
+            Login
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 };

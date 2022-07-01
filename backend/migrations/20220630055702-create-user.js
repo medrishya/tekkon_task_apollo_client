@@ -13,11 +13,6 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-      },
       password: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -28,6 +23,9 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE,
+      },
+      lastSeen: {
         type: Sequelize.DATE,
       },
     });
