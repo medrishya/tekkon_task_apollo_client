@@ -27,10 +27,7 @@ export const SendMessageForm = () => {
     update(_, res) {
       console.log(res);
       openNotification("Message sent successfully successfull");
-      form.setFieldsValue({
-        username: "",
-        password: "",
-      });
+      form.resetFields();
     },
     onError(err) {
       console.log(err);
